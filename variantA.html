@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: "Montserrat", sans-serif;
+        background-image: linear-gradient(
+          to bottom right,
+          rgb(34, 14, 105),
+          rgb(10, 213, 240)
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .title {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .content {
+        background-color: white;
+        min-height: 400px;
+        width: 540px;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      input[type="text"] {
+        font-size: medium;
+        margin-top: 50px;
+        margin-bottom: 10px;
+        width: 80%;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        outline: none;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .delete-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .error-message {
+        margin-top: 10px;
+        color: red;
+        font-size: 14px;
+        height: 20px;
+      }
+
+      .error-count {
+        position: fixed;
+        bottom: 20px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .navigation {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        width: 540px;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        background-color: #28a745;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .nav-link:hover {
+        background-color: #218838;
+      }
+    </style>
+    <title>Variant A - To-Do App</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="title">Variant A</div>
+      <div class="content">
+        <h1>My To-Do List</h1>
+        <input type="text" id="task-input" placeholder="Add a new task..." />
+        <button id="add-btn">Add Task</button>
+        <ul id="task-list"></ul>
+        <div id="error-message" class="error-message"></div>
+      </div>
+      <div class="navigation">
+        <a href="index.html" class="nav-link">Go Back</a>
+        <a href="variantB.html" class="nav-link">Next</a>
+      </div>
+    </div>
+
+    <div id="error-count" class="error-count">Total Errors: 0</div>
+
+    <script>
+      const taskInput = document.getElementById("task-input");
+      const addBtn = document.getElementById("add-btn");
+      const taskList = document.getElementById("task-list");
+      const errorMessage = document.getElementById("error-message");
+      const errorCountDisplay = document.getElementById("error-count");
+      let errorCount = 0;
+
+      function displayError(message) {
+        errorMessage.textContent = message;
+        errorCount++;
+        errorCountDisplay.textContent = `Total Errors: ${errorCount}`;
+
+        setTimeout(() => {
+          errorMessage.textContent = "";
+        }, 3000);
+      }
+
+      addBtn.addEventListener("click", () => {
+        const taskText = taskInput.value.trim();
+
+        // Check for empty task
+        if (taskText === "") {
+          displayError("Error: Task cannot be empty!");
+          return;
+        }
+
+        // Check for duplicate tasks
+        const existingTasks = document.querySelectorAll("#task-list li");
+        for (let task of existingTasks) {
+          if (task.firstChild.textContent.trim() === taskText) {
+            displayError("Error: Task already exists!");
+            return;
+          }
+        }
+
+        // Add task
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+          ${taskText}
+          <button class="delete-btn">Delete</button>
+        `;
+        taskList.appendChild(listItem);
+        taskInput.value = "";
+      });
+
+      taskList.addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-btn")) {
+          const listItem = event.target.parentElement;
+          taskList.removeChild(listItem);
+        }
+      });
+    </script>
+  </body>
+</html>
